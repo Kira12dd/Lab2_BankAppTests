@@ -47,13 +47,11 @@ namespace Lab2_BankAppTests.StepDefinitions
         [Then(@"the customer list should display ""(.*)"" in the search results")]
         public void ThenTheCustomerListShouldDisplayInTheSearchResults(string expectedName)
         {
-            var names = _managerPage.GetFirstNamesInTable();
+            var rows = _managerPage.GetRowsAfterSearch(expectedName);
 
-            Assert.That(names, Is.Not.Empty, "Таблиця результатів порожня!");
-            Assert.That(names.Any(name => name.Contains(expectedName)), Is.True,
-                $"Ім'я {expectedName} не знайдено серед відфільтрованих записів.");
-            
-            System.Threading.Thread.Sleep(3000);
+            Assert.That(rows, Is.Not.Empty, "Таблиця результатів порожня!");
+            Assert.That(rows.All(r => r.IndexOf(expectedName, System.StringComparison.OrdinalIgnoreCase) >= 0), Is.True,
+                $"Не всі записи відповідають пошуку '{expectedName}'.");
         }
     }
 }

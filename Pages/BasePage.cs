@@ -13,6 +13,7 @@ namespace Lab2_BankAppTests.Pages
         {
             Driver = driver;
             Wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            Wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException), typeof(NoSuchElementException));
         }
 
         protected IWebElement WaitForElement(By locator)

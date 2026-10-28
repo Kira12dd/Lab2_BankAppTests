@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using OpenQA.Selenium;
 
@@ -24,10 +25,14 @@ namespace Lab2_BankAppTests.Pages
             input.SendKeys(text);
         }
 
-        public List<string> GetFirstNamesInTable()
+        public List<string> GetRowsAfterSearch(string searchText)
         {
-            var rows = Driver.FindElements(customerRows);
-            return rows.Select(r => r.FindElements(By.TagName("td"))[0].Text).ToList();
+            Wait.Until(d => {
+                var elements = d.FindElements(customerRows);
+                return elements.Count > 0 && elements.All(r => r.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0);
+            });
+
+            return Driver.FindElements(customerRows).Select(r => r.Text).ToList();
         }
     }
 }
