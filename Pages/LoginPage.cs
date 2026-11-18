@@ -8,9 +8,11 @@ namespace Lab2_BankAppTests.Pages
 
         public LoginPage(IWebDriver driver) : base(driver) { }
 
-        public void Open(string url)
+        private const string Url = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
+
+        public void Open()
         {
-            Driver.Navigate().GoToUrl(url);
+            Driver.Navigate().GoToUrl(Url);
         }
 
         public void ClickBankManagerLogin()

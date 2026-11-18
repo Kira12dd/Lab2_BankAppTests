@@ -25,14 +25,42 @@ namespace Lab2_BankAppTests.Pages
             input.SendKeys(text);
         }
 
-        public List<string> GetRowsAfterSearch(string searchText)
+        public List<string> GetRows()
         {
-            Wait.Until(d => {
-                var elements = d.FindElements(customerRows);
-                return elements.Count > 0 && elements.All(r => r.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0);
-            });
-
             return Driver.FindElements(customerRows).Select(r => r.Text).ToList();
+        }
+
+        // true, якщо таблиця відфільтрувалась за 10 с
+        public bool WaitUntilFilteredBy(string text)
+        {
+            try
+            {
+                Wait.Until(d =>
+                {
+                    var rows = d.FindElements(customerRows);
+                    return rows.Count > 0 &&
+                           rows.All(r => r.Text.Contains(text, StringComparison.OrdinalIgnoreCase));
+                });
+                return true;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+        }
+
+        // true, якщо таблиця стала порожньою за 10 с
+        public bool WaitUntilTableIsEmpty()
+        {
+            try
+            {
+                Wait.Until(d => d.FindElements(customerRows).Count == 0);
+                return true;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
         }
     }
 }

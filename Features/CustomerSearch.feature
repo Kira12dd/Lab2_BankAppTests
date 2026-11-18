@@ -3,9 +3,21 @@
   I want to be able to search customers by their name
   So that I can quickly review customer details
 
-  Scenario: Successfully search for an existing customer
+  Background:
     Given I open the banking application
-    When I log in as a Bank Manager
+    And I log in as a Bank Manager
     And I navigate to the Customers tab
-    And I search for customer "Harry"
-    Then the customer list should display "Harry" in the search results
+
+  Scenario Outline: Search for an existing customer
+    When I search for customer "<name>"
+    Then only customers matching "<name>" should be displayed
+
+    Examples:
+      | name     |
+      | Harry    |
+      | Albus    |
+
+  Scenario: Search for a non-existing customer
+    When I search for customer "Nobody"
+    Then no customers should be displayed
+

@@ -1,57 +1,62 @@
-﻿using System.Linq;
-using Lab2_BankAppTests.Pages;
-using NUnit.Framework;
+﻿using Lab2_BankAppTests.Pages;
 using OpenQA.Selenium;
 using TechTalk.SpecFlow;
+
 
 namespace Lab2_BankAppTests.StepDefinitions
 {
     [Binding]
     public class CustomerSearchSteps
     {
-        private readonly IWebDriver _driver;
         private readonly LoginPage _loginPage;
         private readonly ManagerPage _managerPage;
 
         public CustomerSearchSteps(ScenarioContext scenarioContext)
         {
-            _driver = (IWebDriver)scenarioContext["WebDriver"];
-            _loginPage = new LoginPage(_driver);
-            _managerPage = new ManagerPage(_driver);
+            var driver = (IWebDriver)scenarioContext["WebDriver"];
+            _loginPage = new LoginPage(driver);
+            _managerPage = new ManagerPage(driver);
         }
 
         [Given(@"I open the banking application")]
         public void GivenIOpenTheBankingApplication()
         {
-            _loginPage.Open("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+            _loginPage.Open();
         }
 
-        [When(@"I log in as a Bank Manager")]
-        public void WhenILogInAsABankManager()
+        [Given(@"I log in as a Bank Manager")]
+        public void GivenILogInAsABankManager()
         {
             _loginPage.ClickBankManagerLogin();
         }
 
-        [When(@"I navigate to the Customers tab")]
-        public void WhenINavigateToTheCustomersTab()
+        [Given(@"I navigate to the Customers tab")]
+        public void GivenINavigateToTheCustomersTab()
         {
             _managerPage.OpenCustomersTab();
         }
 
-        [When(@"I search for customer ""(.*)""")]
+        [When(@"I search for customer ""([^""]*)""")]
         public void WhenISearchForCustomer(string customerName)
         {
             _managerPage.EnterSearchText(customerName);
         }
 
-        [Then(@"the customer list should display ""(.*)"" in the search results")]
-        public void ThenTheCustomerListShouldDisplayInTheSearchResults(string expectedName)
+        [Then(@"only customers matching ""([^""]*)"" should be displayed")]
+        public void ThenOnlyMatchingCustomersShouldBeDisplayed(string expectedName)
         {
-            var rows = _managerPage.GetRowsAfterSearch(expectedName);
+            var isFiltered = _managerPage.WaitUntilFilteredBy(expectedName);
+            var rows = _managerPage.GetRows();
 
-            Assert.That(rows, Is.Not.Empty, "Таблиця результатів порожня!");
-            Assert.That(rows.All(r => r.IndexOf(expectedName, System.StringComparison.OrdinalIgnoreCase) >= 0), Is.True,
-                $"Не всі записи відповідають пошуку '{expectedName}'.");
+            Assert.That(isFiltered, Is.True,
+                $"Таблиця не відфільтрувалась за '{expectedName}'. Рядки: {string.Join(" | ", rows)}");
+        }
+
+        [Then(@"no customers should be displayed")]
+        public void ThenNoCustomersShouldBeDisplayed()
+        {
+            Assert.That(_managerPage.WaitUntilTableIsEmpty(), Is.True,
+                "Таблиця не порожня після пошуку неіснуючого клієнта.");
         }
     }
 }
