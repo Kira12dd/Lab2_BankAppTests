@@ -4,11 +4,11 @@ namespace Lab2_BankAppTests.Pages
 {
     public class LoginPage : BasePage
     {
+        private const string Url = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
+
         private readonly By managerLoginButton = By.XPath("//button[contains(text(), 'Bank Manager Login')]");
 
         public LoginPage(IWebDriver driver) : base(driver) { }
-
-        private const string Url = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
 
         public void Open()
         {
@@ -17,7 +17,7 @@ namespace Lab2_BankAppTests.Pages
 
         public void ClickBankManagerLogin()
         {
-            WaitForClickable(managerLoginButton).Click();
+            Click(managerLoginButton);
         }
     }
 }

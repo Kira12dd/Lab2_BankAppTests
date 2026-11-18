@@ -124,14 +124,10 @@ namespace Lab2_BankAppTests.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Search for a non-existing customer")]
-        [NUnit.Framework.TestCaseAttribute("99699999", null)]
-        [NUnit.Framework.TestCaseAttribute("Nobody", null)]
-        [NUnit.Framework.TestCaseAttribute("NonExistentUser", null)]
-        public void SearchForANon_ExistingCustomer(string name, string[] exampleTags)
+        public void SearchForANon_ExistingCustomer()
         {
-            string[] tagsOfScenario = exampleTags;
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("name", name);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a non-existing customer", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 20
   this.ScenarioInitialize(scenarioInfo);
@@ -147,7 +143,7 @@ namespace Lab2_BankAppTests.Features
   this.FeatureBackground();
 #line hidden
 #line 21
-    testRunner.When(string.Format("I search for customer \"{0}\"", name), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("I search for customer \"Nobody\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 22
     testRunner.Then("no customers should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

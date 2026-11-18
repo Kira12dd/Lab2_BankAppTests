@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace Lab2_BankAppTests.Pages
 {
@@ -15,14 +12,12 @@ namespace Lab2_BankAppTests.Pages
 
         public void OpenCustomersTab()
         {
-            WaitForClickable(customersTabButton).Click();
+            Click(customersTabButton);
         }
 
         public void EnterSearchText(string text)
         {
-            var input = WaitForElement(searchInput);
-            input.Clear();
-            input.SendKeys(text);
+            TypeText(searchInput, text);
         }
 
         public List<string> GetRows()

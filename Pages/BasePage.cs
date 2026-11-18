@@ -32,5 +32,17 @@ namespace Lab2_BankAppTests.Pages
                 return (element.Displayed && element.Enabled) ? element : null;
             });
         }
+
+        protected void Click(By locator)
+        {
+            WaitForClickable(locator).Click();
+        }
+
+        protected void TypeText(By locator, string text)
+        {
+            var element = WaitForElement(locator);
+            element.Clear();
+            element.SendKeys(text);
+        }
     }
 }
